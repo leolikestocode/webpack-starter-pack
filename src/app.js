@@ -1,4 +1,6 @@
 import React from 'react';
+import './styles/style.scss';
+
 export default function() {
-    return <div>Hello from react !</div>;
+    return <h1>Hello World!!!</h1>
 }
