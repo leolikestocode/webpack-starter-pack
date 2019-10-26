@@ -4,7 +4,7 @@
   "description": "Webpack starter pack",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --mode development --inline --progress --watch",
     "build": "cross-env NODE_ENV=production webpack"
   },
   "repository": {

@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const modoDev = process.env.NODE_ENV !== 'production'
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -12,7 +13,8 @@ module.exports = {
     },
     devServer: {
         contentBase: "./public",
-        port: 9000
+        port: 9000,
+        compress: true,
     },
     optimization: {
         minimizer: [
