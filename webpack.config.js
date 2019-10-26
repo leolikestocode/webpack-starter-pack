@@ -1,40 +1,45 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const modoDev = process.env.NODE_ENV !== 'production'
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = {
-    entry: './src/index.js',
+    mode: modoDev ? 'development' : 'production',
+    entry: './src/principal.js',
     output: {
-        path: path.join(__dirname, '/build'),
-        filename: 'bundle.js',
+        filename: 'principal.js',
+        path: __dirname + '/public'
     },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                },
-            },
-            {
-                test : /\.(png|jpg|gif|ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-                loader : "file-loader"
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [
-                    // Creates `style` nodes from JS strings
-                    'style-loader',
-                    // Translates CSS into CommonJS
-                    'css-loader',
-                    // Compiles Sass to CSS
-                    'sass-loader',
-                ],
-            },
-        ],
+    devServer: {
+        contentBase: "./public",
+        port: 9000
+    },
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true
+            }),
+            new OptimizeCSSAssetsPlugin({})
+        ]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-        }),
+        new MiniCssExtractPlugin({
+            filename: "estilo.css"
+        })
     ],
-};
+    module: {
+        rules: [{
+            test: /\.s?[ac]ss$/,
+            use: [
+                MiniCssExtractPlugin.loader, // Adiciona css em arquivo externo
+                // "style-loader",// Adiciona CSS a DOM injetando tag <style>
+                "css-loader", //Interpreta @import, url()
+                "sass-loader"
+            ]
+        }, {
+            test: /\.(jpg|svg|png|gif)$/,
+            use: 'file-loader'
+        }]
+    }
+}
